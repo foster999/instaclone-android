@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Instaclone</string>
+    <string name="image_select_button">Choose photo</string>
+    <string name="sepia_button">Sepia</string>
+    <string name="toon_button">Toon</string>
+    <string name="sketch_button">Sketch</string>
+    <string name="invert_button">Invert</string>
+    <string name="save_button">Save filtered photo</string>
+</resources>

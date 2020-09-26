@@ -1,9 +1,5 @@
 package com.example.instaclone;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
@@ -11,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,15 +16,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
 import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Locale;
 
 import jp.wasabeef.glide.transformations.gpu.InvertFilterTransformation;
 import jp.wasabeef.glide.transformations.gpu.SepiaFilterTransformation;
@@ -60,6 +59,9 @@ public class MainActivity extends AppCompatActivity
      * Apply Glide filter to loaded image.
      */
     public void apply(Transformation<Bitmap> filter) {
+        if (image == null) {
+            return;
+        }
         Glide
                 .with(this)
                 .load(image)
@@ -89,15 +91,24 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void saveImage(View view) {
+        if (image == null) {
+            return;
+        }
         Bitmap image = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
         String root = Environment.getExternalStorageDirectory().toString();
         File outDir = new File(root + "/filtered_images");
         outDir.mkdirs();
         int fileNumber = 0;
-        File outFile = new File(outDir, String.format("%d_", fileNumber) + lastFilter + ".jpg");
+        File outFile = new File(outDir, String.format(
+                Locale.getDefault(),
+                "%d_",
+                fileNumber) + lastFilter + ".jpg");
         while (outFile.exists()) {
             fileNumber++;
-            outFile = new File(outDir, String.format("%d_", fileNumber) + lastFilter + ".jpg");
+            outFile = new File(outDir, String.format(
+                    Locale.getDefault(),
+                    "%d_",
+                    fileNumber) + lastFilter + ".jpg");
         }
         Log.d("Instaclone", "Outfile: " + outFile.getAbsolutePath());
         try {
